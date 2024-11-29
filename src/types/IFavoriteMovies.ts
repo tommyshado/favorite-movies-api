@@ -1,4 +1,4 @@
-interface IMovie {
+export interface IMovie {
     "id": number,
     "overview": string,  
     "adult": boolean,

@@ -7,7 +7,7 @@ CREATE TABLE users (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE favorites_movies (
+CREATE TABLE favorite_movies (
   id SERIAL PRIMARY KEY,
   title VARCHAR(250) NOT NULL,
   language VARCHAR(50) NOT NULL,
