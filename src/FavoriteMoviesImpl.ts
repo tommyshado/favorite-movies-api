@@ -1,45 +1,28 @@
 import * as pgPromise from 'pg-promise';
-import { IMovie, IMovies } from './types/IFavoriteMovies';
-import { UsersImpl } from './UsersImpl';
+import { IFavorite } from './types/IFavorite';
 
-export class FavoriteMoviesImpl implements IMovies {
-    constructor(private db: pgPromise.IDatabase<any>, private usersImpl: UsersImpl) {}
+export class FavoriteMoviesImpl {
+    constructor(private db: pgPromise.IDatabase<any>) {}
 
-    // Add movie that comes from the api when a user clicks on the favorite button
-    async addMovie(movie: IMovie): Promise<boolean> {
-        // first check if the user exists
-        const user = await this.usersImpl.findUser(movie.user_id);
-        if (!user) {
-            throw new Error('User does not exist');
-        }
-        
-        const result = await this.db.query('INSERT INTO movies VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-            [movie.overview, movie.adult, movie.release_date, movie.language, movie.title, movie.popularity, movie.ratings, movie.selected_movie, movie.user_id]);
+    async addFavoriteMovie(userId: number, movieId: number): Promise<boolean> {
+        const result = await this.db.query('INSERT INTO favorite_movies VALUES ($1, $2)',
+            [userId, movieId]);
         return result.rowCount === 1;
     }
 
-    async removeMovie(id: number): Promise<boolean> {
-        // Check if a movie exists
-        const movie = await this.getMovieById(id);
-        if (!movie) {
-            throw new Error('Movie does not exist');
-        }
-
-        const result = await this.db.query('DELETE FROM movies WHERE id = $1', [id]);
+    async removeFavoriteMovie(userId: number, movieId: number): Promise<boolean> {
+        const result = await this.db.query('DELETE FROM favorite_movies WHERE user_id = $1 AND movie_id = $2',
+            [userId, movieId]);
         return result.rowCount === 1;
     }
 
-    async getMovieById(id: number): Promise<IMovie> {
-        // Check if a movie exists
-        const movie = await this.getMovieById(id);
-        if (!movie) {
-            throw new Error('Movie does not exist');
-        }
-
-        return await this.db.query('SELECT * FROM movies WHERE id = $1', [id]);
+    async getFavoriteMovies(userId: number): Promise<number[]> {
+        const result = await this.db.query('SELECT movie_id FROM favorite_movies WHERE user_id = $1', [userId]);
+        return result.map((movie: any) => movie.movie_id);
     }
 
-    async getMoviesList(): Promise<IMovie[]> {
-        return await this.db.query('SELECT * FROM movies');
+    // Create a function that will join the movies table with the favorite_movies table and return the results using the user_id and movie_id
+    async getFavoriteMoviesWithDetails(userId: number): Promise<any[]> {
+        return await this.db.query('SELECT * FROM movies INNER JOIN favorite_movies ON movies.id = favorite_movies.movie_id WHERE user_id = $1', [userId]);
     }
 }

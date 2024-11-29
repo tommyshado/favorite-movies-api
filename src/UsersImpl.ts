@@ -25,7 +25,7 @@ export class UsersImpl implements IUsers {
             throw new Error('User does not exist');
         }
         const result = await this.db.query('UPDATE users SET name = $1, email = $2 WHERE id = $3', [user.name, user.email, id]);
-        return result.rowCount === 1 ? true : false;
+        return result.rowCount === 1;
     }
 
     async deleteUser(id: number): Promise<boolean> {
@@ -34,7 +34,7 @@ export class UsersImpl implements IUsers {
             throw new Error('User does not exist');
         }
         const result = await this.db.query('DELETE FROM users WHERE id = $1', [id]);
-        return result.rowCount === 1 ? true : false;
+        return result.rowCount === 1;
     }
 
     async getAllUsers(): Promise<IUser[]> {
