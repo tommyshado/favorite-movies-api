@@ -11,9 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Movies = void 0;
 class Movies {
-    constructor(db, usersImpl) {
+    constructor(db) {
         this.db = db;
-        this.usersImpl = usersImpl;
     }
     // Add movie that comes from the api when a user clicks on the favorite button
     addMovie(movie) {
@@ -35,11 +34,6 @@ class Movies {
     }
     getMovieById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Check if a movie exists
-            const movie = yield this.getMovieById(id);
-            if (!movie) {
-                throw new Error('Movie does not exist');
-            }
             return yield this.db.query('SELECT * FROM movies WHERE id = $1', [id]);
         });
     }
