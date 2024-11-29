@@ -3,7 +3,7 @@ import { IMovie, IMovies } from './types/IMovies';
 import { UsersImpl } from './UsersImpl';
 
 export class Movies implements IMovies {
-    constructor(private db: pgPromise.IDatabase<any>, private usersImpl: UsersImpl) {}
+    constructor(private db: pgPromise.IDatabase<any>) {}
 
     // Add movie that comes from the api when a user clicks on the favorite button
     async addMovie(movie: IMovie): Promise<boolean> {
@@ -24,12 +24,6 @@ export class Movies implements IMovies {
     }
 
     async getMovieById(id: number): Promise<IMovie> {
-        // Check if a movie exists
-        const movie = await this.getMovieById(id);
-        if (!movie) {
-            throw new Error('Movie does not exist');
-        }
-
         return await this.db.query('SELECT * FROM movies WHERE id = $1', [id]);
     }
 
