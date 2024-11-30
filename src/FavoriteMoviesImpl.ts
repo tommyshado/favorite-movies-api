@@ -42,17 +42,6 @@ export class FavoriteMoviesImpl implements IFavorite {
         return result.rowCount === 1;
     }
 
-    async getFavorites(userId: number): Promise<number[]> {
-        // Check if the user exists
-        const user = await this.usersImpl.findUser(userId);
-        if (!user) {
-            return [];
-        }
-
-        const result = await this.db.query('SELECT movie_id FROM favorite_movies WHERE user_id = $1 AND favorite_movie = true', [userId]);
-        return result.map((movie: any) => movie.movie_id);
-    }
-
     // Create a function that will join the movies table with the favorite_movies table and return the results using the user_id and movie_id
     // Ensure you are selecting where the favorite_movie boolean is true
     async getUserFavoriteMovies(userId: number): Promise<any[]> {

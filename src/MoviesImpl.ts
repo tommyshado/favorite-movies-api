@@ -1,6 +1,5 @@
 import * as pgPromise from 'pg-promise';
 import { IMovie, IMovies } from './types/IMovies';
-import { UsersImpl } from './UsersImpl';
 
 export class Movies implements IMovies {
     constructor(private db: pgPromise.IDatabase<any>) {}
