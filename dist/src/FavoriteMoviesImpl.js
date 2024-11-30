@@ -50,17 +50,6 @@ class FavoriteMoviesImpl {
             return result.rowCount === 1;
         });
     }
-    getFavorites(userId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Check if the user exists
-            const user = yield this.usersImpl.findUser(userId);
-            if (!user) {
-                return [];
-            }
-            const result = yield this.db.query('SELECT movie_id FROM favorite_movies WHERE user_id = $1 AND favorite_movie = true', [userId]);
-            return result.map((movie) => movie.movie_id);
-        });
-    }
     // Create a function that will join the movies table with the favorite_movies table and return the results using the user_id and movie_id
     // Ensure you are selecting where the favorite_movie boolean is true
     getUserFavoriteMovies(userId) {
