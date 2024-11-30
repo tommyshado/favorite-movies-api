@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use("/api", favoritesRouter, usersRouter, moviesRouter);
 
 app.get("/", (req, res) => {
-  res.send("Welcome to the Schools Database API");
+  res.send("Welcome to the favorite-movies-api");
 });
 
 app.listen(PORT, () => console.log("🚀 favorite-movies-api started @:", PORT));
