@@ -18,7 +18,7 @@ const usersImpl = new UsersImpl_1.UsersImpl(pool_1.dbForApp);
 const moviesImpl = new MoviesImpl_1.Movies(pool_1.dbForApp);
 class FavoriteMoviesController extends FavoriteMoviesImpl_1.FavoriteMoviesImpl {
     constructor() {
-        super(pool_1.dbForApp, usersImpl, moviesImpl);
+        super(pool_1.dbForApp, /* usersImpl,*/ moviesImpl);
     }
     addFavorite(req, res) {
         const _super = Object.create(null, {

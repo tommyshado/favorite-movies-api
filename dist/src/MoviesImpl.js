@@ -17,7 +17,15 @@ class Movies {
     // Add movie that comes from the api when a user clicks on the favorite button
     addMovie(movie) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.db.query('INSERT INTO movies VALUES ($1, $2, $3, $4, $5, $6, $7)', [movie.title, movie.language, movie.overview, movie.release_date, movie.adult, movie.ratings, movie.popularity]);
+            const result = yield this.db.query("INSERT INTO movies VALUES ($1, $2, $3, $4, $5, $6, $7)", [
+                movie.title,
+                movie.language,
+                movie.overview,
+                movie.release_date,
+                movie.adult,
+                movie.ratings,
+                movie.popularity,
+            ]);
             return result.rowCount === 1;
         });
     }
@@ -26,20 +34,22 @@ class Movies {
             // Check if a movie exists
             const movie = yield this.getMovieById(id);
             if (!movie) {
-                throw new Error('Movie does not exist');
+                throw new Error("Movie does not exist");
             }
-            const result = yield this.db.query('DELETE FROM movies WHERE id = $1', [id]);
+            const result = yield this.db.query("DELETE FROM movies WHERE id = $1", [
+                id,
+            ]);
             return result.rowCount === 1;
         });
     }
     getMovieById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.db.query('SELECT * FROM movies WHERE id = $1', [id]);
+            return yield this.db.query("SELECT * FROM movies WHERE id = $1", [id]);
         });
     }
     getMoviesList() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.db.query('SELECT * FROM movies');
+            return yield this.db.query("SELECT * FROM movies");
         });
     }
 }

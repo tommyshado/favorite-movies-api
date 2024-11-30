@@ -2,7 +2,6 @@ import { dbForApp } from "../model/pool";
 import { UsersImpl } from "../UsersImpl";
 import { Request, Response } from 'express';
 
-
 export class UsersController extends UsersImpl {
     constructor() {
         super(dbForApp);
@@ -19,9 +18,9 @@ export class UsersController extends UsersImpl {
     }
 
     async findAUser(req: Request, res: Response) {
-        const userId = parseInt(req.params.userId);
+        const email = req.query.email as string;
         try {
-            const result = await super.findUser(userId);
+            const result = await super.findUser(email);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -29,10 +28,9 @@ export class UsersController extends UsersImpl {
     }
 
     async updateAUser(req: Request, res: Response) {
-        const userId = parseInt(req.params.userId);
         const user = req.body;
         try {
-            const result = await super.updateUser(userId, user);
+            const result = await super.updateUser(user);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -40,9 +38,9 @@ export class UsersController extends UsersImpl {
     }
 
     async deleteAUser(req: Request, res: Response) {
-        const userId = parseInt(req.params.userId);
+        const email = req.body;
         try {
-            const result = await super.deleteUser(userId);
+            const result = await super.deleteUser(email);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);

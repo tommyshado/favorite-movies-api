@@ -14,45 +14,49 @@ class UsersImpl {
     constructor(db) {
         this.db = db;
     }
-    findUser(id) {
+    checksUser(user) {
+        if (!user.name) {
+            throw new Error("User name is required");
+        }
+        if (!user.email) {
+            throw new Error("User email is required");
+        }
+    }
+    findUser(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.db.query('SELECT * FROM users WHERE id = $1', [id]);
+            return yield this.db.query("SELECT * FROM users WHERE email = $1", [email]);
         });
     }
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Check if user exists
-            const userExists = yield this.findUser(user.id);
+            this.checksUser(user);
+            const userExists = yield this.findUser(user.email);
             if (userExists) {
-                throw new Error('User already exists');
+                throw new Error("User already exists");
             }
-            const result = yield this.db.query('INSERT INTO users VALUES ($1, $2, $3)', [user.id, user.name, user.email]);
+            const result = yield this.db.query("INSERT INTO users VALUES ($1, $2, $3)", [user.id, user.name, user.email]);
             return result.rowCount === 1 ? user : {};
         });
     }
-    updateUser(id, user) {
+    updateUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkUser = yield this.findUser(id);
-            if (!checkUser) {
-                throw new Error('User does not exist');
-            }
-            const result = yield this.db.query('UPDATE users SET name = $1, email = $2 WHERE id = $3', [user.name, user.email, id]);
+            this.checksUser(user);
+            const result = yield this.db.query("UPDATE users SET name = $1, email = $2 WHERE email = $3", [user.name, user.email, user.email]);
             return result.rowCount === 1;
         });
     }
-    deleteUser(id) {
+    deleteUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkUser = yield this.findUser(id);
-            if (!checkUser) {
-                throw new Error('User does not exist');
-            }
-            const result = yield this.db.query('DELETE FROM users WHERE id = $1', [id]);
+            this.checksUser(user);
+            const result = yield this.db.query("DELETE FROM users WHERE email = $1", [
+                user.email,
+            ]);
             return result.rowCount === 1;
         });
     }
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.db.query('SELECT * FROM users');
+            return yield this.db.query("SELECT * FROM users");
         });
     }
 }

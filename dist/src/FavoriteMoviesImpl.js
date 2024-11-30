@@ -11,42 +11,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FavoriteMoviesImpl = void 0;
 class FavoriteMoviesImpl {
-    constructor(db, usersImpl, movieImpl) {
+    constructor(db, 
+    /* private usersImpl: UsersImpl, */ movieImpl) {
         this.db = db;
-        this.usersImpl = usersImpl;
         this.movieImpl = movieImpl;
     }
     addToFavorites(userId, movieId) {
         return __awaiter(this, void 0, void 0, function* () {
             // Check if the user exists
-            const user = yield this.usersImpl.findUser(userId);
-            if (!user) {
-                return false;
-            }
+            // const user = await this.usersImpl.findUser(userId);
+            // if (!user) {
+            //     return false;
+            // }
             // Check if the movie exists
             const movie = yield this.movieImpl.getMovieById(movieId);
             if (!movie) {
                 return false;
             }
             // Insert and update the favorite_movie boolean to true
-            const result = yield this.db.query('INSERT INTO favorite_movies (user_id, movie_id, favorite_movie) VALUES ($1, $2, true)', [userId, movieId]);
+            const result = yield this.db.query("INSERT INTO favorite_movies (user_id, movie_id, favorite_movie) VALUES ($1, $2, true)", [userId, movieId]);
             return result.rowCount === 1;
         });
     }
     removeFromFavorites(userId, movieId) {
         return __awaiter(this, void 0, void 0, function* () {
             // Check if the user exists
-            const user = yield this.usersImpl.findUser(userId);
-            if (!user) {
-                return false;
-            }
+            // const user = await this.usersImpl.findUser(userId);
+            // if (!user) {
+            //     return false;
+            // }
             // Check if the movie exists
             const movie = yield this.movieImpl.getMovieById(movieId);
             if (!movie) {
                 return false;
             }
             // This function should update the favorite_movie boolean to false
-            const result = yield this.db.query('UPDATE favorite_movies SET favorite_movie = false WHERE user_id = $1 AND movie_id = $2', [userId, movieId]);
+            const result = yield this.db.query("UPDATE favorite_movies SET favorite_movie = false WHERE user_id = $1 AND movie_id = $2", [userId, movieId]);
             return result.rowCount === 1;
         });
     }
@@ -55,11 +55,11 @@ class FavoriteMoviesImpl {
     getUserFavoriteMovies(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             // Check if the user exists
-            const user = yield this.usersImpl.findUser(userId);
-            if (!user) {
-                return [];
-            }
-            const result = yield this.db.query('SELECT * FROM movies INNER JOIN favorite_movies ON movies.id = favorite_movies.movie_id WHERE favorite_movies.user_id = $1 AND favorite_movies.favorite_movie = true', [userId]);
+            // const user = await this.usersImpl.findUser(userId);
+            // if (!user) {
+            //     return [];
+            // }
+            const result = yield this.db.query("SELECT * FROM movies INNER JOIN favorite_movies ON movies.id = favorite_movies.movie_id WHERE favorite_movies.user_id = $1 AND favorite_movies.favorite_movie = true", [userId]);
             return result;
         });
     }

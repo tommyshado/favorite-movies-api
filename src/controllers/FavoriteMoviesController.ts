@@ -9,7 +9,7 @@ const moviesImpl = new Movies(dbForApp);
 
 export class FavoriteMoviesController extends FavoriteMoviesImpl {
     constructor() {
-        super(dbForApp, usersImpl, moviesImpl);
+        super(dbForApp, /* usersImpl,*/ moviesImpl);
     }
 
     async addFavorite(req: Request, res: Response) {

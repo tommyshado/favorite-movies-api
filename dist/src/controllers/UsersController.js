@@ -36,9 +36,9 @@ class UsersController extends UsersImpl_1.UsersImpl {
             findUser: { get: () => super.findUser }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            const userId = parseInt(req.params.userId);
+            const email = req.query.email;
             try {
-                const result = yield _super.findUser.call(this, userId);
+                const result = yield _super.findUser.call(this, email);
                 res.status(200).send(result);
             }
             catch (error) {
@@ -51,10 +51,9 @@ class UsersController extends UsersImpl_1.UsersImpl {
             updateUser: { get: () => super.updateUser }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            const userId = parseInt(req.params.userId);
             const user = req.body;
             try {
-                const result = yield _super.updateUser.call(this, userId, user);
+                const result = yield _super.updateUser.call(this, user);
                 res.status(200).send(result);
             }
             catch (error) {
@@ -67,9 +66,9 @@ class UsersController extends UsersImpl_1.UsersImpl {
             deleteUser: { get: () => super.deleteUser }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            const userId = parseInt(req.params.userId);
+            const email = req.body;
             try {
-                const result = yield _super.deleteUser.call(this, userId);
+                const result = yield _super.deleteUser.call(this, email);
                 res.status(200).send(result);
             }
             catch (error) {

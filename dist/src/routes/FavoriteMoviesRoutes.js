@@ -9,6 +9,6 @@ const FavoriteMoviesController_1 = require("../controllers/FavoriteMoviesControl
 const favoritesRouter = express_1.default.Router();
 exports.favoritesRouter = favoritesRouter;
 const favoriteMoviesController = new FavoriteMoviesController_1.FavoriteMoviesController();
-favoritesRouter.get('favorites/:userId', favoriteMoviesController.findUserFavorites);
-favoritesRouter.post('favorites/:userId/:movieId', favoriteMoviesController.addFavorite);
-favoritesRouter.delete('favorites/:userId/:movieId', favoriteMoviesController.removeFavorite);
+favoritesRouter.get("favorites/:userId", favoriteMoviesController.findUserFavorites);
+favoritesRouter.post("favorites/:userId/:movieId", favoriteMoviesController.addFavorite);
+favoritesRouter.delete("favorites/:userId/:movieId", favoriteMoviesController.removeFavorite);
