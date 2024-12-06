@@ -1,11 +1,13 @@
 import express from "express";
 import { FavoriteMoviesController } from "../controllers/FavoriteMoviesController";
+// import { authenticate } from "../middlewares/authMiddleware";
 
 const favoritesRouter = express.Router();
 const favoriteMoviesController = new FavoriteMoviesController();
 
 favoritesRouter.get(
   "favorites/:userId",
+  // authenticate,
   favoriteMoviesController.findUserFavorites
 );
 favoritesRouter.post(
@@ -13,7 +15,7 @@ favoritesRouter.post(
   favoriteMoviesController.addFavorite
 );
 favoritesRouter.delete(
-  "favorites/:userId/:movieId",
+  "favorites/:userId/:id",
   favoriteMoviesController.removeFavorite
 );
 

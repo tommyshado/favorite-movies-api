@@ -1,22 +1,28 @@
 import { dbForApp } from "../model/pool";
 import { FavoriteMoviesImpl } from "../FavoriteMoviesImpl";
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { UsersImpl } from "../UsersImpl";
-import { Movies } from "../MoviesImpl";
 
 const usersImpl = new UsersImpl(dbForApp);
-const moviesImpl = new Movies(dbForApp);
 
 export class FavoriteMoviesController extends FavoriteMoviesImpl {
     constructor() {
-        super(dbForApp, /* usersImpl,*/ moviesImpl);
+        super(dbForApp, usersImpl);
     }
 
     async addFavorite(req: Request, res: Response) {
         const userId = parseInt(req.params.userId);
-        const movieId = parseInt(req.params.movieId);
+        const movie = {
+            id: parseInt(req.params.movieId),
+            title: req.body.title,
+            backdrop_path: req.body.backdrop_path,
+            overview: req.body.overview,
+            language: req.body.language,
+            release_date: req.body.release_date
+        }
+        
         try {
-            const result = await super.addToFavorites(userId, movieId);
+            const result = await super.addToFavorites(userId, movie);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -25,7 +31,7 @@ export class FavoriteMoviesController extends FavoriteMoviesImpl {
 
     async removeFavorite(req: Request, res: Response) {
         const userId = parseInt(req.params.userId);
-        const movieId = parseInt(req.params.movieId);
+        const movieId = parseInt(req.params.id);
         try {
             const result = await super.removeFromFavorites(userId, movieId);
             res.status(200).send(result);

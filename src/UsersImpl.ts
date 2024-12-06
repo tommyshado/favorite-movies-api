@@ -26,7 +26,7 @@ export class UsersImpl implements IUsers {
 
     const result = await this.db.query(
       "INSERT INTO users VALUES ($1, $2, $3)",
-      [user.id, user.name, user.email]
+      [user.name, user.email, user.new_password]
     );
     return result.rowCount === 1 ? user : {};
   }
@@ -34,9 +34,11 @@ export class UsersImpl implements IUsers {
   async updateUser(user: IUser): Promise<boolean> {
     this.checksUser(user);
 
+    // Decrypt the new password then add to the db
+
     const result = await this.db.query(
-      "UPDATE users SET name = $1, email = $2 WHERE email = $3",
-      [user.name, user.email, user.email]
+      "UPDATE users SET name = $1, email = $2, password = $3 WHERE email = $2 AND password = $4",
+      [user.name, user.email, user.new_password, user.old_password]
     );
     return result.rowCount === 1;
   }

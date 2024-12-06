@@ -1,17 +1,9 @@
+// Definition of the IMovie interface - data will come from the movies database api
 export interface IMovie {
-    "id"?: number,
-    "overview": string,
-    "adult": boolean,
-    "release_date": string,
-    "language": string,  
-    "title": string,
-    "popularity": number,
-    "ratings": number,
-}
-
-export interface IMovies {
-    addMovie: (movie: IMovie) => Promise<boolean>;
-    removeMovie: (id: number) => Promise<boolean>;
-    getMovieById: (id: number) => Promise<IMovie>;
-    getMoviesList: () => Promise<IMovie[]>;
+    id: number;
+    title: string;
+    backdrop_path: string;
+    overview: string;
+    language: string;
+    release_date: string;
 }

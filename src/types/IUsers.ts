@@ -3,6 +3,8 @@ export interface IUser {
     name: string;
     email: string;
     created_at?: Date;
+    new_password?: string;
+    old_password?: string;
 }
 
 export interface IUsers {
