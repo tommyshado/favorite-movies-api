@@ -6,7 +6,7 @@ import { IMovie } from "./types/IMovies";
 export class FavoriteMoviesImpl implements IFavorite {
   constructor(
     private db: pgPromise.IDatabase<any>,
-    private usersImpl: UsersImpl,
+    private usersImpl: UsersImpl
   ) {}
 
   async addToFavorites(userId: number, movie: IMovie): Promise<boolean> {
@@ -18,8 +18,19 @@ export class FavoriteMoviesImpl implements IFavorite {
 
     // Insert and update the favorite_movie boolean to true
     const result = await this.db.query(
-      "INSERT INTO favorite_movies (title, language, overview, release_date, backdrop_path, user_id, favorite_movie) VALUES ($1, $2, $3, $4, $5, $6, true)",
-      [movie.title, movie.language, movie.overview, movie.release_date, movie.backdrop_path, userId]
+      `INSERT INTO 
+       favorite_movies (title, language, overview, release_date, backdrop_path, movie_id, user_id, favorite_movie)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, true)
+      `,
+      [
+        movie.title,
+        movie.language,
+        movie.overview,
+        movie.release_date,
+        movie.backdrop_path,
+        movie.id,
+        userId,
+      ]
     );
     return result.rowCount === 1;
   }

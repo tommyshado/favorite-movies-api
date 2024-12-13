@@ -11,25 +11,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FavoriteMoviesImpl = void 0;
 class FavoriteMoviesImpl {
-    constructor(db, 
-    /* private usersImpl: UsersImpl, */ movieImpl) {
+    constructor(db, usersImpl) {
         this.db = db;
-        this.movieImpl = movieImpl;
+        this.usersImpl = usersImpl;
     }
-    addToFavorites(userId, movieId) {
+    addToFavorites(userId, movie) {
         return __awaiter(this, void 0, void 0, function* () {
             // Check if the user exists
             // const user = await this.usersImpl.findUser(userId);
             // if (!user) {
             //     return false;
             // }
-            // Check if the movie exists
-            const movie = yield this.movieImpl.getMovieById(movieId);
-            if (!movie) {
-                return false;
-            }
             // Insert and update the favorite_movie boolean to true
-            const result = yield this.db.query("INSERT INTO favorite_movies (user_id, movie_id, favorite_movie) VALUES ($1, $2, true)", [userId, movieId]);
+            const result = yield this.db.query(`INSERT INTO 
+       favorite_movies (title, language, overview, release_date, backdrop_path, movie_id, user_id, favorite_movie)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, true)
+      `, [
+                movie.title,
+                movie.language,
+                movie.overview,
+                movie.release_date,
+                movie.backdrop_path,
+                movie.id,
+                userId,
+            ]);
             return result.rowCount === 1;
         });
     }
@@ -40,18 +45,11 @@ class FavoriteMoviesImpl {
             // if (!user) {
             //     return false;
             // }
-            // Check if the movie exists
-            const movie = yield this.movieImpl.getMovieById(movieId);
-            if (!movie) {
-                return false;
-            }
             // This function should update the favorite_movie boolean to false
             const result = yield this.db.query("UPDATE favorite_movies SET favorite_movie = false WHERE user_id = $1 AND movie_id = $2", [userId, movieId]);
             return result.rowCount === 1;
         });
     }
-    // Create a function that will join the movies table with the favorite_movies table and return the results using the user_id and movie_id
-    // Ensure you are selecting where the favorite_movie boolean is true
     getUserFavoriteMovies(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             // Check if the user exists
@@ -59,7 +57,7 @@ class FavoriteMoviesImpl {
             // if (!user) {
             //     return [];
             // }
-            const result = yield this.db.query("SELECT * FROM movies INNER JOIN favorite_movies ON movies.id = favorite_movies.movie_id WHERE favorite_movies.user_id = $1 AND favorite_movies.favorite_movie = true", [userId]);
+            const result = yield this.db.query("SELECT * FROM favorite_movies WHERE user_id = $1 AND favorite_movie = true", [userId]);
             return result;
         });
     }

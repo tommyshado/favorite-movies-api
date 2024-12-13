@@ -34,14 +34,15 @@ class UsersImpl {
             if (userExists) {
                 throw new Error("User already exists");
             }
-            const result = yield this.db.query("INSERT INTO users VALUES ($1, $2, $3)", [user.id, user.name, user.email]);
+            const result = yield this.db.query("INSERT INTO users VALUES ($1, $2, $3)", [user.name, user.email, user.new_password]);
             return result.rowCount === 1 ? user : {};
         });
     }
     updateUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             this.checksUser(user);
-            const result = yield this.db.query("UPDATE users SET name = $1, email = $2 WHERE email = $3", [user.name, user.email, user.email]);
+            // Decrypt the new password then add to the db
+            const result = yield this.db.query("UPDATE users SET name = $1, email = $2, password = $3 WHERE email = $2 AND password = $4", [user.name, user.email, user.new_password, user.old_password]);
             return result.rowCount === 1;
         });
     }

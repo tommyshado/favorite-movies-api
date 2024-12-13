@@ -1,6 +1,6 @@
 import express from "express";
 import { FavoriteMoviesController } from "../controllers/FavoriteMoviesController";
-// import { authenticate } from "../middlewares/authMiddleware";
+import { authenticate } from "../middlewares/authMiddleware";
 
 const favoritesRouter = express.Router();
 const favoriteMoviesController = new FavoriteMoviesController();
@@ -11,7 +11,7 @@ favoritesRouter.get(
   favoriteMoviesController.findUserFavorites
 );
 favoritesRouter.post(
-  "favorites/:userId/:movieId",
+  "favorites/:userId/",
   favoriteMoviesController.addFavorite
 );
 favoritesRouter.delete(
