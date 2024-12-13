@@ -13,10 +13,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.use("/api", favoritesRouter, usersRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Favorite Movies API");
 });
+
+app.use("/api", favoritesRouter, usersRouter);
 
 app.listen(PORT, () => console.log("🚀 favorite-movies-api started @:", PORT));
