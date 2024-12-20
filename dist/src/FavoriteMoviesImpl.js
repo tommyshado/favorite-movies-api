@@ -57,6 +57,7 @@ class FavoriteMoviesImpl {
             // if (!user) {
             //     return [];
             // }
+            console.log("userId", userId);
             const result = yield this.db.query("SELECT * FROM favorite_movies WHERE user_id = $1 AND favorite_movie = true", [userId]);
             return result;
         });

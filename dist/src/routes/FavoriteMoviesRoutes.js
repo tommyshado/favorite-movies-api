@@ -6,11 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.favoritesRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const FavoriteMoviesController_1 = require("../controllers/FavoriteMoviesController");
+// import { authenticate } from "../middlewares/authMiddleware";
 const favoritesRouter = express_1.default.Router();
 exports.favoritesRouter = favoritesRouter;
 const favoriteMoviesController = new FavoriteMoviesController_1.FavoriteMoviesController();
-favoritesRouter.get("favorites/:userId", 
+console.log("favoriteMoviesController", favoriteMoviesController);
+favoritesRouter.get("/favorites/:userId", 
 // authenticate,
 favoriteMoviesController.findUserFavorites);
-favoritesRouter.post("favorites/:userId/", favoriteMoviesController.addFavorite);
-favoritesRouter.delete("favorites/:userId/:id", favoriteMoviesController.removeFavorite);
+favoritesRouter.post("/favorites/:userId/", favoriteMoviesController.addFavorite);
+favoritesRouter.delete("/favorites/:userId/:id", favoriteMoviesController.removeFavorite);

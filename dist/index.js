@@ -15,8 +15,8 @@ app.use((0, cors_1.default)());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 // parse application/json
 app.use(body_parser_1.default.json());
-app.use("/api", FavoriteMoviesRoutes_1.favoritesRouter, UsersRoutes_1.usersRouter);
 app.get("/", (req, res) => {
     res.send("Welcome to the Favorite Movies API");
 });
+app.use("/api", FavoriteMoviesRoutes_1.favoritesRouter, UsersRoutes_1.usersRouter);
 app.listen(PORT, () => console.log("🚀 favorite-movies-api started @:", PORT));

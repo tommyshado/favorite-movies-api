@@ -5,17 +5,20 @@ import { FavoriteMoviesController } from "../controllers/FavoriteMoviesControlle
 const favoritesRouter = express.Router();
 const favoriteMoviesController = new FavoriteMoviesController();
 
+console.log("favoriteMoviesController", favoriteMoviesController);
+
+
 favoritesRouter.get(
-  "favorites/:userId",
+  "/favorites/:userId",
   // authenticate,
   favoriteMoviesController.findUserFavorites
 );
 favoritesRouter.post(
-  "favorites/:userId/",
+  "/favorites/:userId/",
   favoriteMoviesController.addFavorite
 );
 favoritesRouter.delete(
-  "favorites/:userId/:id",
+  "/favorites/:userId/:id",
   favoriteMoviesController.removeFavorite
 );
 
