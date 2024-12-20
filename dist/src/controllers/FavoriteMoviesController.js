@@ -10,18 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FavoriteMoviesController = void 0;
-const pool_1 = require("../model/pool");
-const FavoriteMoviesImpl_1 = require("../FavoriteMoviesImpl");
-const UsersImpl_1 = require("../UsersImpl");
-const usersImpl = new UsersImpl_1.UsersImpl(pool_1.dbForApp);
-class FavoriteMoviesController extends FavoriteMoviesImpl_1.FavoriteMoviesImpl {
-    constructor() {
-        super(pool_1.dbForApp);
+class FavoriteMoviesController {
+    constructor(favoriteMoviesImpl) {
+        this.favoriteMoviesImpl = favoriteMoviesImpl;
+        this.addFavorite = this.addFavorite.bind(this);
+        this.removeFavorite = this.removeFavorite.bind(this);
+        this.findUserFavorites = this.findUserFavorites.bind(this);
     }
     addFavorite(req, res) {
-        const _super = Object.create(null, {
-            addToFavorites: { get: () => super.addToFavorites }
-        });
         return __awaiter(this, void 0, void 0, function* () {
             const userId = parseInt(req.params.userId);
             const movie = {
@@ -33,7 +29,7 @@ class FavoriteMoviesController extends FavoriteMoviesImpl_1.FavoriteMoviesImpl {
                 release_date: req.body.release_date
             };
             try {
-                const result = yield _super.addToFavorites.call(this, userId, movie);
+                const result = yield this.favoriteMoviesImpl.addToFavorites(userId, movie);
                 res.status(200).send(result);
             }
             catch (error) {
@@ -42,14 +38,11 @@ class FavoriteMoviesController extends FavoriteMoviesImpl_1.FavoriteMoviesImpl {
         });
     }
     removeFavorite(req, res) {
-        const _super = Object.create(null, {
-            removeFromFavorites: { get: () => super.removeFromFavorites }
-        });
         return __awaiter(this, void 0, void 0, function* () {
             const userId = parseInt(req.params.userId);
             const movieId = parseInt(req.params.id);
             try {
-                const result = yield _super.removeFromFavorites.call(this, userId, movieId);
+                const result = yield this.favoriteMoviesImpl.removeFromFavorites(userId, movieId);
                 res.status(200).send(result);
             }
             catch (error) {
@@ -58,13 +51,10 @@ class FavoriteMoviesController extends FavoriteMoviesImpl_1.FavoriteMoviesImpl {
         });
     }
     findUserFavorites(req, res) {
-        const _super = Object.create(null, {
-            getUserFavoriteMovies: { get: () => super.getUserFavoriteMovies }
-        });
         return __awaiter(this, void 0, void 0, function* () {
             const userId = parseInt(req.params.userId);
             try {
-                const result = yield _super.getUserFavoriteMovies.call(this, userId);
+                const result = yield this.favoriteMoviesImpl.getUserFavoriteMovies(userId);
                 res.status(200).send(result);
             }
             catch (error) {

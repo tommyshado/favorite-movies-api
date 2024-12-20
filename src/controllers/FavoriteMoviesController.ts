@@ -1,13 +1,11 @@
-import { dbForApp } from "../model/pool";
 import { FavoriteMoviesImpl } from "../FavoriteMoviesImpl";
-import { Request, Response, NextFunction } from 'express';
-import { UsersImpl } from "../UsersImpl";
+import { Request, Response } from 'express';
 
-const usersImpl = new UsersImpl(dbForApp);
-
-export class FavoriteMoviesController extends FavoriteMoviesImpl {
-    constructor() {
-        super(dbForApp, /* usersImpl */);
+export class FavoriteMoviesController {
+    constructor(private favoriteMoviesImpl: FavoriteMoviesImpl) {
+        this.addFavorite = this.addFavorite.bind(this);
+        this.removeFavorite = this.removeFavorite.bind(this);
+        this.findUserFavorites = this.findUserFavorites.bind(this);
     }
 
     async addFavorite(req: Request, res: Response) {
@@ -22,7 +20,7 @@ export class FavoriteMoviesController extends FavoriteMoviesImpl {
         }
         
         try {
-            const result = await super.addToFavorites(userId, movie);
+            const result = await this.favoriteMoviesImpl.addToFavorites(userId, movie);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -33,7 +31,7 @@ export class FavoriteMoviesController extends FavoriteMoviesImpl {
         const userId = parseInt(req.params.userId);
         const movieId = parseInt(req.params.id);
         try {
-            const result = await super.removeFromFavorites(userId, movieId);
+            const result = await this.favoriteMoviesImpl.removeFromFavorites(userId, movieId);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -43,7 +41,7 @@ export class FavoriteMoviesController extends FavoriteMoviesImpl {
     async findUserFavorites(req: Request, res: Response) {
         const userId = parseInt(req.params.userId);
         try {
-            const result = await super.getUserFavoriteMovies(userId);
+            const result = await this.favoriteMoviesImpl.getUserFavoriteMovies(userId);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);
