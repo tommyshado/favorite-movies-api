@@ -21,7 +21,7 @@ class FavoriteMoviesController {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = parseInt(req.params.userId);
             const movie = {
-                id: parseInt(req.params.movieId),
+                id: parseInt(req.body.id),
                 title: req.body.title,
                 backdrop_path: req.body.backdrop_path,
                 overview: req.body.overview,

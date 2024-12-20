@@ -11,14 +11,14 @@ export class FavoriteMoviesController {
     async addFavorite(req: Request, res: Response) {
         const userId = parseInt(req.params.userId);
         const movie = {
-            id: parseInt(req.params.movieId),
+            id: parseInt(req.body.id),
             title: req.body.title,
             backdrop_path: req.body.backdrop_path,
             overview: req.body.overview,
             language: req.body.language,
             release_date: req.body.release_date
         }
-        
+
         try {
             const result = await this.favoriteMoviesImpl.addToFavorites(userId, movie);
             res.status(200).send(result);
