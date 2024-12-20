@@ -6,7 +6,7 @@ import { IMovie } from "./types/IMovies";
 export class FavoriteMoviesImpl implements IFavorite {
   constructor(
     private db: pgPromise.IDatabase<any>,
-    private usersImpl: UsersImpl
+    // private usersImpl: UsersImpl
   ) {}
 
   async addToFavorites(userId: number, movie: IMovie): Promise<boolean> {

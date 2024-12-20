@@ -11,9 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FavoriteMoviesImpl = void 0;
 class FavoriteMoviesImpl {
-    constructor(db, usersImpl) {
+    constructor(db) {
         this.db = db;
-        this.usersImpl = usersImpl;
     }
     addToFavorites(userId, movie) {
         return __awaiter(this, void 0, void 0, function* () {

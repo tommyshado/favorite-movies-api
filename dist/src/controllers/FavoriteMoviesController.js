@@ -16,7 +16,7 @@ const UsersImpl_1 = require("../UsersImpl");
 const usersImpl = new UsersImpl_1.UsersImpl(pool_1.dbForApp);
 class FavoriteMoviesController extends FavoriteMoviesImpl_1.FavoriteMoviesImpl {
     constructor() {
-        super(pool_1.dbForApp, usersImpl);
+        super(pool_1.dbForApp);
     }
     addFavorite(req, res) {
         const _super = Object.create(null, {
