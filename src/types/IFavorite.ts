@@ -1,7 +1,27 @@
-import { IMovie } from './IMovies';
+import { IMovie } from "./IMovies";
+
+export interface IFavoriteMessages {
+  status: string;
+  message: string;
+}
+
+export interface IFavoriteMovie {
+  id: number; // Primary key
+  title: string; // Title of the movie
+  language: string; // Language of the movie
+  overview: string; // Overview of the movie
+  releaseDate: string; // Release date as a string in ISO format or a specific format
+  backdropPath: string; // Path to the movie's backdrop image
+  movieId: number; // Unique identifier for the movie
+  userId: number; // Foreign key referencing the user
+  favoriteMovie: boolean; // Whether the movie is marked as a favorite
+}
 
 export interface IFavorite {
-    addToFavorites: (userId: number, movie: IMovie) => Promise<boolean>;
-    removeFromFavorites: (userId: number, movieId: number) => Promise<boolean>;
-    getUserFavoriteMovies: (userId: number) => Promise<any[]>;
+  addToFavorites: (email: string, movie: IMovie) => Promise<IFavoriteMessages>;
+  removeFromFavorites: (
+    email: string,
+    movieId: number
+  ) => Promise<IFavoriteMessages>;
+  getUserFavoriteMovies: (email: string) => Promise<any[]>;
 }

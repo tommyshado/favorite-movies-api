@@ -14,7 +14,7 @@ export class UsersImpl implements IUsers {
   }
 
   async findUser(email: string): Promise<IUser> {
-    return await this.db.query("SELECT * FROM users WHERE email = $1", [email]);
+    return await this.db.query("SELECT * FROM users WHERE email ilike $1", [email]);
   }
 
   async createUser(user: IUser): Promise<IUser | {}> {

@@ -9,7 +9,7 @@ export interface IUser {
 
 export interface IUsers {
     createUser(user: IUser): Promise<IUser> | {};
-    findUser(email: string): Promise<IUser>;
+    findUser(email: string): Promise<IUser | null>;
     updateUser(user: IUser): Promise<boolean>;
     deleteUser(user: IUser): Promise<boolean>;
     getAllUsers(): Promise<IUser[]>;

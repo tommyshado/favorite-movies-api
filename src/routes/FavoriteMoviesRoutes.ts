@@ -3,23 +3,24 @@ import { FavoriteMoviesController } from "../controllers/FavoriteMoviesControlle
 import { FavoriteMoviesImpl } from "../FavoriteMoviesImpl";
 import { dbForApp } from "../model/pool";
 // import { authenticate } from "../middlewares/authMiddleware";
+import { UsersImpl } from "../UsersImpl";
 
 const favoritesRouter = express.Router();
 
-const favoriteMoviesImpl = new FavoriteMoviesImpl(dbForApp);
+const favoriteMoviesImpl = new FavoriteMoviesImpl(dbForApp, new UsersImpl(dbForApp));
 const favoriteMoviesController = new FavoriteMoviesController(favoriteMoviesImpl);
 
 favoritesRouter.get(
-  "/favorites/:userId",
+  "/favorites",
   // authenticate,
   favoriteMoviesController.findUserFavorites
 );
 favoritesRouter.post(
-  "/favorites/:userId/",
+  "/favorites",
   favoriteMoviesController.addFavorite
 );
 favoritesRouter.delete(
-  "/favorites/:userId/:id",
+  "/favorites/:id",
   favoriteMoviesController.removeFavorite
 );
 
