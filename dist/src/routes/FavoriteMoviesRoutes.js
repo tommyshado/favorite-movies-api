@@ -9,12 +9,13 @@ const FavoriteMoviesController_1 = require("../controllers/FavoriteMoviesControl
 const FavoriteMoviesImpl_1 = require("../FavoriteMoviesImpl");
 const pool_1 = require("../model/pool");
 // import { authenticate } from "../middlewares/authMiddleware";
+const UsersImpl_1 = require("../UsersImpl");
 const favoritesRouter = express_1.default.Router();
 exports.favoritesRouter = favoritesRouter;
-const favoriteMoviesImpl = new FavoriteMoviesImpl_1.FavoriteMoviesImpl(pool_1.dbForApp);
+const favoriteMoviesImpl = new FavoriteMoviesImpl_1.FavoriteMoviesImpl(pool_1.dbForApp, new UsersImpl_1.UsersImpl(pool_1.dbForApp));
 const favoriteMoviesController = new FavoriteMoviesController_1.FavoriteMoviesController(favoriteMoviesImpl);
-favoritesRouter.get("/favorites/:userId", 
+favoritesRouter.get("/favorites", 
 // authenticate,
 favoriteMoviesController.findUserFavorites);
-favoritesRouter.post("/favorites/:userId/", favoriteMoviesController.addFavorite);
-favoritesRouter.delete("/favorites/:userId/:id", favoriteMoviesController.removeFavorite);
+favoritesRouter.post("/favorites", favoriteMoviesController.addFavorite);
+favoritesRouter.delete("/favorites/:id", favoriteMoviesController.removeFavorite);

@@ -11,18 +11,58 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FavoriteMoviesImpl = void 0;
 class FavoriteMoviesImpl {
-    constructor(db) {
+    constructor(db, usersImpl) {
         this.db = db;
+        this.usersImpl = usersImpl;
     }
-    addToFavorites(userId, movie) {
+    checkIfUserExists(email) {
         return __awaiter(this, void 0, void 0, function* () {
             // Check if the user exists
-            // const user = await this.usersImpl.findUser(userId);
-            // if (!user) {
-            //     return false;
-            // }
+            const user = yield this.usersImpl.findUser(email);
+            if (!user) {
+                return {
+                    status: "error",
+                    message: "User does not exist"
+                };
+            }
+            return user;
+        });
+    }
+    checkIfMovieExists(movieId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Check if the movie exists
+            const movieExists = yield this.db.query("SELECT * FROM favorite_movies WHERE movie_id = $1", [movieId]);
+            if (movieExists.length === 0) {
+                return {
+                    status: "error",
+                    message: "Movie does not exist"
+                };
+            }
+            return movieExists[0];
+        });
+    }
+    addToFavorites(email, movie) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const checkUser = yield this.checkIfUserExists(email);
+            const checkMovie = yield this.checkIfMovieExists(movie.id);
+            // Handle errors or return messages from the check function
+            if ('status' in checkUser && checkUser.status === "error") {
+                return checkUser;
+            }
+            if ('status' in checkMovie && checkMovie.status === "error") {
+                return checkMovie;
+            }
+            // `checkResult` contains the user object if the checks passed
+            const user = checkUser;
+            const favoriteMovie = checkMovie;
+            if (favoriteMovie.favoriteMovie) {
+                return {
+                    status: "error",
+                    message: "Movie already exists"
+                };
+            }
             // Insert and update the favorite_movie boolean to true
-            const result = yield this.db.query(`INSERT INTO 
+            yield this.db.query(`INSERT INTO 
        favorite_movies (title, language, overview, release_date, backdrop_path, movie_id, user_id, favorite_movie)
        VALUES ($1, $2, $3, $4, $5, $6, $7, true)
       `, [
@@ -32,32 +72,52 @@ class FavoriteMoviesImpl {
                 movie.release_date,
                 movie.backdrop_path,
                 movie.id,
-                userId,
+                user.id,
             ]);
-            return result.rowCount === 1;
+            return {
+                status: "success",
+                message: "Movie added to favorites"
+            };
         });
     }
-    removeFromFavorites(userId, movieId) {
+    removeFromFavorites(email, movieId) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Check if the user exists
-            // const user = await this.usersImpl.findUser(userId);
-            // if (!user) {
-            //     return false;
-            // }
-            // This function should update the favorite_movie boolean to false
-            const result = yield this.db.query("UPDATE favorite_movies SET favorite_movie = false WHERE user_id = $1 AND movie_id = $2", [userId, movieId]);
-            return result.rowCount === 1;
+            const checkUser = yield this.checkIfUserExists(email);
+            const checkMovie = yield this.checkIfMovieExists(movieId);
+            // Handle errors or return messages from the check function
+            if ('status' in checkUser && checkUser.status === "error") {
+                return checkUser;
+            }
+            if ('status' in checkMovie && checkMovie.status === "error") {
+                return checkMovie;
+            }
+            // `checkResult` contains the user object if the checks passed
+            const user = checkUser;
+            const favoriteMovie = checkMovie;
+            if (favoriteMovie.favoriteMovie) {
+                // This function should update the favorite_movie boolean to false
+                const result = yield this.db.query("UPDATE favorite_movies SET favorite_movie = false WHERE user_id = $1 AND movie_id = $2", [user.id, movieId]);
+                if (result.rowCount === 1) {
+                    return {
+                        status: "success",
+                        message: "Movie removed from favorites"
+                    };
+                }
+            }
+            return {
+                status: "error",
+                message: "Movie does not exist"
+            };
         });
     }
-    getUserFavoriteMovies(userId) {
+    getUserFavoriteMovies(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Check if the user exists
-            // const user = await this.usersImpl.findUser(userId);
-            // if (!user) {
-            //     return [];
-            // }
-            console.log("userId", userId);
-            const result = yield this.db.query("SELECT * FROM favorite_movies WHERE user_id = $1 AND favorite_movie = true", [userId]);
+            const checkUser = yield this.checkIfUserExists(email);
+            if ('status' in checkUser && checkUser.status === "error") {
+                return [checkUser];
+            }
+            const user = checkUser;
+            const result = yield this.db.query("SELECT * FROM favorite_movies WHERE user_id = $1 AND favorite_movie = true", [user.id]);
             return result;
         });
     }
