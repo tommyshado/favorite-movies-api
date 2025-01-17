@@ -13,13 +13,16 @@ export class UsersImpl implements IUsers {
     }
   }
 
-  async findUser(email: string): Promise<IUser> {
-    return await this.db.query("SELECT * FROM users WHERE email ilike $1", [email]);
+  async findUser(userId: number): Promise<IUser> {
+    return await this.db.query("SELECT * FROM users WHERE id = $1", [userId]);
   }
 
   async createUser(user: IUser): Promise<IUser | {}> {
     this.checksUser(user);
-    const userExists = await this.findUser(user.email);
+    if (!user.id) {
+      throw new Error("User ID is required");
+    }
+    const userExists = await this.findUser(user.id);
     if (userExists) {
       throw new Error("User already exists");
     }

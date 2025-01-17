@@ -10,9 +10,9 @@ export class FavoriteMoviesImpl implements IFavorite {
     private usersImpl: UsersImpl
   ) {}
 
-  private async checkIfUserExists(email: string): Promise<IUser | IFavoriteMessages> {
+  private async checkIfUserExists(userId: number): Promise<IUser | IFavoriteMessages> {
     // Check if the user exists
-    const user = await this.usersImpl.findUser(email);
+    const user = await this.usersImpl.findUser(userId);
     if (!user) {
         return {
           status: "error",
@@ -39,8 +39,8 @@ export class FavoriteMoviesImpl implements IFavorite {
     return movieExists[0] as IFavoriteMovie;
   }
 
-  async addToFavorites(email: string, movie: IMovie): Promise<IFavoriteMessages> {
-    const checkUser = await this.checkIfUserExists(email);
+  async addToFavorites(userId: number, movie: IMovie): Promise<IFavoriteMessages> {
+    const checkUser = await this.checkIfUserExists(userId);
     const checkMovie = await this.checkIfMovieExists(movie.id);
 
     // Handle errors or return messages from the check function
@@ -85,8 +85,8 @@ export class FavoriteMoviesImpl implements IFavorite {
     }
   }
 
-  async removeFromFavorites(email: string, movieId: number): Promise<IFavoriteMessages> {
-    const checkUser = await this.checkIfUserExists(email);
+  async removeFromFavorites(userId: number, movieId: number): Promise<IFavoriteMessages> {
+    const checkUser = await this.checkIfUserExists(userId);
     const checkMovie = await this.checkIfMovieExists(movieId);
 
     // Handle errors or return messages from the check function
@@ -122,8 +122,8 @@ export class FavoriteMoviesImpl implements IFavorite {
     };
   }
 
-  async getUserFavoriteMovies(email: string): Promise<any[]> {
-    const checkUser = await this.checkIfUserExists(email);
+  async getUserFavoriteMovies(userId: number): Promise<any[]> {
+    const checkUser = await this.checkIfUserExists(userId);
 
     if ('status' in checkUser && checkUser.status === "error") {
       return [checkUser];

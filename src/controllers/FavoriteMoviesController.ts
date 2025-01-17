@@ -9,7 +9,7 @@ export class FavoriteMoviesController {
     }
 
     async addFavorite(req: Request, res: Response) {
-        const email = req.query.email as string;
+        const userId = Number(req.query.userId);
         const movie = {
             id: parseInt(req.body.id),
             title: req.body.title,
@@ -20,7 +20,7 @@ export class FavoriteMoviesController {
         }
 
         try {
-            const result = await this.favoriteMoviesImpl.addToFavorites(email, movie);
+            const result = await this.favoriteMoviesImpl.addToFavorites(userId, movie);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -28,10 +28,10 @@ export class FavoriteMoviesController {
     }
 
     async removeFavorite(req: Request, res: Response) {
-        const email = req.query.email as string;
+        const userId = Number(req.query.userId);
         const movieId = parseInt(req.params.id);
         try {
-            const result = await this.favoriteMoviesImpl.removeFromFavorites(email, movieId);
+            const result = await this.favoriteMoviesImpl.removeFromFavorites(userId, movieId);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);
@@ -39,9 +39,9 @@ export class FavoriteMoviesController {
     }
 
     async findUserFavorites(req: Request, res: Response) {
-        const email = req.query.email as string;
+        const userId = Number(req.query.userId);
         try {
-            const result = await this.favoriteMoviesImpl.getUserFavoriteMovies(email);
+            const result = await this.favoriteMoviesImpl.getUserFavoriteMovies(userId);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);

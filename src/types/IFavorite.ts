@@ -18,10 +18,10 @@ export interface IFavoriteMovie {
 }
 
 export interface IFavorite {
-  addToFavorites: (email: string, movie: IMovie) => Promise<IFavoriteMessages>;
+  addToFavorites: (userId: number, movie: IMovie) => Promise<IFavoriteMessages>;
   removeFromFavorites: (
-    email: string,
+    userId: number,
     movieId: number
   ) => Promise<IFavoriteMessages>;
-  getUserFavoriteMovies: (email: string) => Promise<any[]>;
+  getUserFavoriteMovies: (userId: number) => Promise<any[]>;
 }
