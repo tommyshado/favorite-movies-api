@@ -18,9 +18,9 @@ export class UsersController extends UsersImpl {
     }
 
     async findAUser(req: Request, res: Response) {
-        const email = req.query.email as string;
+        const userId = Number(req.query.userId);
         try {
-            const result = await super.findUser(email);
+            const result = await super.findUser(userId);
             res.status(200).send(result);
         } catch (error: any) {
             res.status(400).send(error.message);

@@ -19,7 +19,7 @@ class FavoriteMoviesController {
     }
     addFavorite(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const email = req.query.email;
+            const userId = Number(req.query.userId);
             const movie = {
                 id: parseInt(req.body.id),
                 title: req.body.title,
@@ -29,7 +29,7 @@ class FavoriteMoviesController {
                 release_date: req.body.release_date
             };
             try {
-                const result = yield this.favoriteMoviesImpl.addToFavorites(email, movie);
+                const result = yield this.favoriteMoviesImpl.addToFavorites(userId, movie);
                 res.status(200).send(result);
             }
             catch (error) {
@@ -39,10 +39,10 @@ class FavoriteMoviesController {
     }
     removeFavorite(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const email = req.query.email;
+            const userId = Number(req.query.userId);
             const movieId = parseInt(req.params.id);
             try {
-                const result = yield this.favoriteMoviesImpl.removeFromFavorites(email, movieId);
+                const result = yield this.favoriteMoviesImpl.removeFromFavorites(userId, movieId);
                 res.status(200).send(result);
             }
             catch (error) {
@@ -52,9 +52,9 @@ class FavoriteMoviesController {
     }
     findUserFavorites(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const email = req.query.email;
+            const userId = Number(req.query.userId);
             try {
-                const result = yield this.favoriteMoviesImpl.getUserFavoriteMovies(email);
+                const result = yield this.favoriteMoviesImpl.getUserFavoriteMovies(userId);
                 res.status(200).send(result);
             }
             catch (error) {

@@ -22,15 +22,18 @@ class UsersImpl {
             throw new Error("User email is required");
         }
     }
-    findUser(email) {
+    findUser(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.db.query("SELECT * FROM users WHERE email ilike $1", [email]);
+            return yield this.db.query("SELECT * FROM users WHERE id = $1", [userId]);
         });
     }
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             this.checksUser(user);
-            const userExists = yield this.findUser(user.email);
+            if (!user.id) {
+                throw new Error("User ID is required");
+            }
+            const userExists = yield this.findUser(user.id);
             if (userExists) {
                 throw new Error("User already exists");
             }

@@ -15,10 +15,10 @@ class FavoriteMoviesImpl {
         this.db = db;
         this.usersImpl = usersImpl;
     }
-    checkIfUserExists(email) {
+    checkIfUserExists(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             // Check if the user exists
-            const user = yield this.usersImpl.findUser(email);
+            const user = yield this.usersImpl.findUser(userId);
             if (!user) {
                 return {
                     status: "error",
@@ -41,9 +41,9 @@ class FavoriteMoviesImpl {
             return movieExists[0];
         });
     }
-    addToFavorites(email, movie) {
+    addToFavorites(userId, movie) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkUser = yield this.checkIfUserExists(email);
+            const checkUser = yield this.checkIfUserExists(userId);
             const checkMovie = yield this.checkIfMovieExists(movie.id);
             // Handle errors or return messages from the check function
             if ('status' in checkUser && checkUser.status === "error") {
@@ -80,9 +80,9 @@ class FavoriteMoviesImpl {
             };
         });
     }
-    removeFromFavorites(email, movieId) {
+    removeFromFavorites(userId, movieId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkUser = yield this.checkIfUserExists(email);
+            const checkUser = yield this.checkIfUserExists(userId);
             const checkMovie = yield this.checkIfMovieExists(movieId);
             // Handle errors or return messages from the check function
             if ('status' in checkUser && checkUser.status === "error") {
@@ -110,9 +110,9 @@ class FavoriteMoviesImpl {
             };
         });
     }
-    getUserFavoriteMovies(email) {
+    getUserFavoriteMovies(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkUser = yield this.checkIfUserExists(email);
+            const checkUser = yield this.checkIfUserExists(userId);
             if ('status' in checkUser && checkUser.status === "error") {
                 return [checkUser];
             }

@@ -36,9 +36,9 @@ class UsersController extends UsersImpl_1.UsersImpl {
             findUser: { get: () => super.findUser }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            const email = req.query.email;
+            const userId = Number(req.query.userId);
             try {
-                const result = yield _super.findUser.call(this, email);
+                const result = yield _super.findUser.call(this, userId);
                 res.status(200).send(result);
             }
             catch (error) {
